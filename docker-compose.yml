@@ -9,8 +9,5 @@ services:
     ports:
       - "8000:8000"
     restart: unless-stopped
-    volumes:
-      - ./backend:/app/backend # Optional: live code updates
-      - ./cpp_tools:/app/cpp_tools # Optional: access to C++ tools
     environment:
       DJANGO_SETTINGS_MODULE: rtl2cfg.settings

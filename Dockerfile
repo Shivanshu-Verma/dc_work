@@ -30,4 +30,5 @@ EXPOSE 8000
 
 # 8) Start the Django app with Gunicorn
 ENV PATH="/app/backend/.venv/bin:$PATH"
-CMD ["pipenv", "run", "gunicorn", "rtl2cfg.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["pipenv", "run","gunicorn", "rtl2cfg.wsgi:application", "--bind", "0.0.0.0:8000", "--access-logfile", "-", "--error-logfile", "-"]
+
