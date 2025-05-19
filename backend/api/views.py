@@ -5,6 +5,7 @@ import tempfile
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from .utils import convert_cfg_to_dot
 
 class ConvertView(APIView):
     """
@@ -55,10 +56,11 @@ class ConvertView(APIView):
             try:
                 with open(cfg_path, 'r') as f:
                     cfg_text = f.read()
+                    dot_text = convert_cfg_to_dot(cfg_text.strip().split('\n'))
             except FileNotFoundError:
                 return Response(
                     {'error': 'CFG generation failed.'},
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
 
-        return Response({'cfg': cfg_text}, status=status.HTTP_200_OK)
+        return Response({'cfg': cfg_text,'dot': dot_text}, status=status.HTTP_200_OK)
