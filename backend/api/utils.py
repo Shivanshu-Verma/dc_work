@@ -2,7 +2,9 @@ def convert_cfg_to_dot(cfg_lines):
     dot_lines = [
         "digraph CFG {",
         "    rankdir=TB;",
-        "    node [shape=box, style=filled, fillcolor=lightgrey];"
+        "    node [style=filled, fillcolor=lightgrey];"
+        "    START [shape=Mdiamond];"
+        "    END [shape=Msquare];"
     ]
 
     for line in cfg_lines:
