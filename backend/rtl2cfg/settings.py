@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-t1hod$0s#kyj6kxaya)q1&s=#nw!+u+dvx8$!gjfz4gz2n4tcj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['backend.shivanshu.site','dcwork.shivanshu.site','localhost']
+ALLOWED_HOSTS = ['backend.shivanshu.site','rtl2cfg.shivanshu.site','localhost']
 
 
 # Application definition
@@ -124,7 +124,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = '/static/'
+FORCE_SCRIPT_NAME = '/rtl2cfg'
+STATIC_URL = '/rtl2cfg/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
