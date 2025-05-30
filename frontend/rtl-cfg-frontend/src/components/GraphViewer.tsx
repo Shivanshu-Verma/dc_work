@@ -24,6 +24,52 @@ const GraphViewer: React.FC<GraphViewerProps> = ({ data, isLoading }) => {
     }
   }, [data]);
 
+  const handleDownloadPng = useCallback(() => {
+    if (graphRef.current && data) {
+      // Create a temporary DOM element to parse the SVG string
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = data;
+      const svgElement = tempDiv.querySelector("svg");
+      if (!svgElement) return;
+
+      // Set width and height for canvas
+      const width = svgElement.width.baseVal.value || 800;
+      const height = svgElement.height.baseVal.value || 600;
+
+      // Serialize SVG
+      const svgString = new XMLSerializer().serializeToString(svgElement);
+      const svgBlob = new Blob([svgString], { type: "image/svg+xml" });
+      const url = URL.createObjectURL(svgBlob);
+
+      const img = new window.Image();
+      img.onload = function () {
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          ctx.clearRect(0, 0, width, height);
+          ctx.drawImage(img, 0, 0, width, height);
+          canvas.toBlob((blob) => {
+            if (blob) {
+              const pngUrl = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = pngUrl;
+              a.download = "graph.png";
+              a.click();
+              URL.revokeObjectURL(pngUrl);
+            }
+          }, "image/png");
+        }
+        URL.revokeObjectURL(url);
+      };
+      img.onerror = function () {
+        URL.revokeObjectURL(url);
+      };
+      img.src = url;
+    }
+  }, [data]);
+
   const containerClasses = `
     rounded-xl 
     border
@@ -58,13 +104,22 @@ const GraphViewer: React.FC<GraphViewerProps> = ({ data, isLoading }) => {
               style={{ maxHeight: "100%" }}
               dangerouslySetInnerHTML={{ __html: data }}
             />
-            <button
-              onClick={handleDownload}
-              className="absolute bottom-4 right-4 flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-lg"
-            >
-              <Download className="h-4 w-4" />
-              Download SVG
-            </button>
+            <div className="absolute bottom-4 left-0 right-0 flex justify-between px-4 pointer-events-none">
+              <button
+                onClick={handleDownload}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-lg pointer-events-auto"
+              >
+                <Download className="h-4 w-4" />
+                Download SVG
+              </button>
+              <button
+                onClick={handleDownloadPng}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors shadow-lg pointer-events-auto"
+              >
+                <Download className="h-4 w-4" />
+                Download PNG
+              </button>
+            </div>
           </>
         ) : (
           <div className="flex flex-col items-center justify-center h-full text-center p-6">
