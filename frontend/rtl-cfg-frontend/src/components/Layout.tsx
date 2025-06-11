@@ -29,7 +29,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           . All Rights Reserved.
         </p>
         <p>
-          Made with 💙 by{" "}
+          Developed by{" "}
           <a
             href={import.meta.env.VITE_AUTHOR1_URL}
             target="_blank"
